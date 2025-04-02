@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use function Php\Project\Parse\parseFiles;
+
 $autoloadPath1 = __DIR__ . '../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
 
@@ -30,3 +32,7 @@ $args = Docopt::handle($doc, array('version' => GENDIFF_VERSION));
 foreach ($args as $k => $v) {
     echo $k . ': ' . json_encode($v) . PHP_EOL;
 }
+
+$path1 = $args['<firstFile>'];
+$path2 = $args['<secondFile>'];
+parseFiles($path1, $path2);
