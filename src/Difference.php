@@ -2,14 +2,20 @@
 
 namespace Php\Project\Difference;
 
+use Exception;
+
 use function Functional\sort;
-use function Php\Project\Utils\normalizeFile;
+use function Php\Project\Parsers\parseFile;
 use function Php\Project\Utils\stringify;
 
 function genDiff($path1, $path2)
 {
-    $file1 = normalizeFile($path1);
-    $file2 = normalizeFile($path2);
+    try {
+        $file1 = parseFile($path1);
+        $file2 = parseFile($path2);
+    } catch (Exception $err) {
+        die($err->getMessage());
+    }
 
     $keys1 = array_keys($file1);
     $keys2 = array_keys($file2);
