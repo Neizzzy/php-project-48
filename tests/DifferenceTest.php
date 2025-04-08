@@ -2,22 +2,23 @@
 
 namespace Php\Project\Tests\DifferenceTest;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Php\Project\Difference\genDiff;
 
 class DifferenceTest extends TestCase
 {
-    public function getFixtureFullPath($fixtureName)
+    public function getFixtureFullPath($fixtureName): bool|string
     {
         $parts = [__DIR__, 'fixtures', $fixtureName];
         return realpath(implode('/', $parts));
     }
 
-    public function testGenDiffFlat()
+    public function testGenDiffFlat(): void
     {
         $file1 = $this->getFixtureFullPath('file1.json');
-        $file2 = $this->getFixtureFullPath('file2.json');
+        $file2 = $this->getFixtureFullPath('file4.yml');
 
         $data1 = [
             '{',
