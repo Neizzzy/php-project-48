@@ -16,27 +16,21 @@ function stringify(mixed $value, string $replacer = ' ', int $spacesCount = 1, i
     $indent = str_repeat($replacer, ($currentDepth - 1) * $spacesCount);
     $innerIndent = str_repeat($replacer, $currentDepth * $spacesCount);
 
-    $lines = [];
-    foreach ($value as $key => $val) {
-        if (is_array($val)) {
-            $lines[] = $innerIndent . "$key: " . stringify($val, $replacer, $spacesCount, $currentDepth + 1);
-        } else {
-            $lines[] = $innerIndent . "$key: " . convertToString($val);
-        }
-    }
+    $keys = array_keys($value);
 
-    if (empty($lines)) {
+    $fn = function ($acc, $key) use ($replacer, $spacesCount, $currentDepth, $innerIndent, $value) {
+        if (is_array($value[$key])) {
+            $acc[] = $innerIndent . "$key: " . stringify($value[$key], $replacer, $spacesCount, $currentDepth + 1);
+        } else {
+            $acc[] = $innerIndent . "$key: " . convertToString($value[$key]);
+        }
+        return $acc;
+    };
+    $result = array_reduce($keys, $fn, []);
+
+    if (empty($result)) {
         return "{}";
     }
 
-    return "{\n" . implode("\n", $lines) . "\n" . $indent . "}";
-}
-
-function normalizeFile($path): array
-{
-    if (file_exists($path)) {
-        $file = get_object_vars(json_decode(file_get_contents($path)));
-        return $file;
-    }
-    return [];
+    return "{\n" . implode("\n", $result) . "\n" . $indent . "}";
 }
