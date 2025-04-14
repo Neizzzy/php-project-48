@@ -7,4 +7,8 @@
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Neizzzy_php-project-48&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Neizzzy_php-project-48)
 
+gendiff with plain (stylish format):
 [![asciicast](https://asciinema.org/a/nSKB5npMcn0xQmrEpdT0CpJb6.svg)](https://asciinema.org/a/nSKB5npMcn0xQmrEpdT0CpJb6)
+
+gendiff with nesting (stylish format):
+[![asciicast](https://asciinema.org/a/kTBGZSTdtdP88Jht11LVAiGN0.svg)](https://asciinema.org/a/kTBGZSTdtdP88Jht11LVAiGN0)
