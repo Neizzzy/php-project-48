@@ -10,31 +10,51 @@ use function Php\Project\Parsers\parseFile;
 class ParsersTest extends TestCase
 {
     public $exceptedData = [
-        "host" => "hexlet.io",
-        "timeout" => 50,
-        "proxy" => "123.234.53.22",
-        "follow" => false
+        'common' => [
+            'setting1' => 'Value 1',
+            'setting2' => 200,
+            'setting3' => true,
+            'setting6' => [
+                'key' => 'value',
+                'doge' => [
+                    'wow' => ''
+                ]
+            ]
+        ],
+        'group1' => [
+            'baz' => 'bas',
+            'foo' => 'bar',
+            'nest' => [
+                'key' => 'value'
+            ]
+        ],
+        'group2' => [
+            'abc' => 12345,
+            'deep' => [
+                'id' => 45
+            ]
+        ]
     ];
 
-    public function getFixtureFullPath($fixtureName)
+    public function getFixtureFullPath($fixtureName): bool|string
     {
         $parts = [__DIR__, 'fixtures', $fixtureName];
         return realpath(implode('/', $parts));
     }
 
-    public function testParseFileJson()
+    public function testParseFileJson(): void
     {
         $file = $this->getFixtureFullPath('file1.json');
         $this->assertEquals($this->exceptedData, parseFile($file));
     }
 
-    public function testParseFileYaml()
+    public function testParseFileYaml(): void
     {
         $file = $this->getFixtureFullPath('file3.yml');
         $this->assertEquals($this->exceptedData, parseFile($file));
     }
 
-    public function testParseFileWithInvalidPath()
+    public function testParseFileWithInvalidPath(): void
     {
         $invalidPath = 'non/existed/path/file.json';
 
@@ -44,7 +64,7 @@ class ParsersTest extends TestCase
         parseFile($invalidPath);
     }
 
-    public function testParseFileWithInvalidExtension()
+    public function testParseFileWithInvalidExtension(): void
     {
         $path = $this->getFixtureFullPath('file5.txt');
 

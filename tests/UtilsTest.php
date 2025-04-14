@@ -5,11 +5,15 @@ namespace Php\Project\Tests\UtilsTest;
 use PHPUnit\Framework\TestCase;
 
 use function Php\Project\Utils\convertToString;
-use function Php\Project\Utils\stringify;
+use function Php\Project\Utils\getChild;
+use function Php\Project\Utils\getKey;
+use function Php\Project\Utils\getType;
+use function Php\Project\Utils\getValue;
+use function Php\Project\Utils\makeIndent;
 
 class UtilsTest extends TestCase
 {
-    public function testConvertToString()
+    public function testConvertToString(): void
     {
         $this->assertEquals("text", convertToString("text"));
         $this->assertEquals("21", convertToString(21));
@@ -17,61 +21,29 @@ class UtilsTest extends TestCase
         $this->assertEquals("NULL", convertToString(null));
     }
 
-    public function testStringify()
+    public function testGetFunctions(): void
     {
         $data = [
-            "+ host" => "hexlet.io",
-            "+ timeout" => 50,
-            "+ proxy" => "123.234.53.22",
-            "+ follow" => false
+            'key' => 1,
+            'type' => 'nested',
+            'value' => 'wow',
+            'child' => [
+                'child1' => 3
+            ]
         ];
 
-        $nestedData = [
-            '+ hello' => 'world',
-            '+ is' => true,
-            '+ nested' => ['+ count' => 5],
-        ];
+        $this->assertEquals($data['key'], getKey($data));
+        $this->assertEquals($data['type'], getType($data));
+        $this->assertEquals($data['value'], getValue($data));
+        $this->assertEquals($data['child'], getChild($data));
+    }
 
-        $exceptedData1 = [
-            '{',
-            '  + host: hexlet.io',
-            '  + timeout: 50',
-            '  + proxy: 123.234.53.22',
-            '  + follow: false',
-            '}'
-        ];
-
-        $exceptedData2 = [
-            '{',
-            '<>+ host: hexlet.io',
-            '<>+ timeout: 50',
-            '<>+ proxy: 123.234.53.22',
-            '<>+ follow: false',
-            '}'
-        ];
-
-        $exceptedData3 = [
-            '{',
-            '<><>+ host: hexlet.io',
-            '<><>+ timeout: 50',
-            '<><>+ proxy: 123.234.53.22',
-            '<><>+ follow: false',
-            '}'
-        ];
-
-        $exceptedNestedData = [
-            "{",
-            "  + hello: world",
-            "  + is: true",
-            "  + nested: {",
-            "    + count: 5",
-            "  }",
-            "}"
-        ];
-
-        $this->assertEquals(implode("\n", $exceptedData1), stringify($data, spacesCount: 2));
-        $this->assertEquals(implode("\n", $exceptedData2), stringify($data, '<>'));
-        $this->assertEquals(implode("\n", $exceptedData3), stringify($data, '<>', 2));
-        $this->assertEquals(implode("\n", $exceptedNestedData), stringify($nestedData, spacesCount: 2));
+    public function testMakeIndent(): void
+    {
+        $this->assertEquals(str_repeat(' ', 4), makeIndent());
+        $this->assertEquals(str_repeat(' ', 8), makeIndent(depth: 2));
+        $this->assertEquals(str_repeat(' ', 2), makeIndent(shift: 2));
+        $this->assertEquals(' ', makeIndent(spacesCount: 1));
+        $this->assertEquals(str_repeat(' ', 2), makeIndent(2, 2, 2));
     }
 }

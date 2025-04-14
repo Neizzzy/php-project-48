@@ -2,7 +2,6 @@
 
 namespace Php\Project\Tests\DifferenceTest;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Php\Project\Difference\genDiff;
@@ -15,37 +14,58 @@ class DifferenceTest extends TestCase
         return realpath(implode('/', $parts));
     }
 
-    public function testGenDiffFlat(): void
+    public function testGenDiff(): void
     {
         $file1 = $this->getFixtureFullPath('file1.json');
         $file2 = $this->getFixtureFullPath('file4.yml');
 
-        $data1 = [
-            '{',
-            '  - follow: false',
-            '    host: hexlet.io',
-            '  - proxy: 123.234.53.22',
-            '  - timeout: 50',
-            '  + timeout: 20',
-            '  + verbose: true',
-            '}'
-        ];
+        $data3 = <<<DOC
+        {
+            common: {
+              + follow: false
+                setting1: Value 1
+              - setting2: 200
+              - setting3: true
+              + setting3: NULL
+              + setting4: blah blah
+              + setting5: {
+                    key5: value5
+                }
+                setting6: {
+                    doge: {
+                      - wow: 
+                      + wow: so much
+                    }
+                    key: value
+                  + ops: vops
+                }
+            }
+            group1: {
+              - baz: bas
+              + baz: bars
+                foo: bar
+              - nest: {
+                    key: value
+                }
+              + nest: str
+            }
+          - group2: {
+                abc: 12345
+                deep: {
+                    id: 45
+                }
+            }
+          + group3: {
+                deep: {
+                    id: {
+                        number: 45
+                    }
+                }
+                fee: 100500
+            }
+        }
+        DOC;
 
-        $data2 = [
-            '{',
-            '  + follow: false',
-            '    host: hexlet.io',
-            '  + proxy: 123.234.53.22',
-            '  - timeout: 20',
-            '  + timeout: 50',
-            '  - verbose: true',
-            '}'
-        ];
-
-        $fromatedData1 = implode("\n", $data1);
-        $fromatedData2 = implode("\n", $data2);
-
-        $this->assertEquals($fromatedData1, genDiff($file1, $file2));
-        $this->assertEquals($fromatedData2, genDiff($file2, $file1));
+        $this->assertEquals($data3, genDiff($file1, $file2));
     }
 }
