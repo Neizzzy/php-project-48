@@ -12,14 +12,12 @@ const EXCEPTED_FORMATS = ['stylish', 'plain', 'json'];
 
 function formater(array $diffTree, string $format): string
 {
-    if (!in_array($format, EXCEPTED_FORMATS)) {
-        $stringFormats = implode(', ', EXCEPTED_FORMATS);
-        throw new Exception("Format Error: Undefiend format '{$format}'. Excepted formats: {$stringFormats}\n");
-    }
+    $strFormats = implode(', ', EXCEPTED_FORMATS);
 
     return match ($format) {
         'stylish' => formatStylish($diffTree),
         'plain' => formatPlain($diffTree),
         'json' => formatJson($diffTree),
+        default => throw new Exception("Format Error: Undefiend format '{$format}'. Excepted formats: {$strFormats}\n"),
     };
 }

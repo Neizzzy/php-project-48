@@ -9,12 +9,21 @@ const EXCEPTED_EXTENSIONS = ['json', 'yml', 'yaml'];
 
 function parseJson(string $path): array
 {
-    return json_decode(file_get_contents($path), true, flags: JSON_OBJECT_AS_ARRAY);
+    $content = file_get_contents($path);
+    if ($content === false) {
+        throw new Exception("Parse Error: Failed to read {$path}");
+    }
+
+    return json_decode($content, true, flags: JSON_OBJECT_AS_ARRAY);
 }
 
 function parseYaml(string $path): array
 {
-    return Yaml::parse(file_get_contents($path));
+    $content = file_get_contents($path);
+    if ($content === false) {
+        throw new Exception("Parse Error: Failed to read {$path}");
+    }
+    return Yaml::parse($content);
 }
 
 function parseFile(string $path): array
@@ -24,15 +33,12 @@ function parseFile(string $path): array
     }
 
     $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
-
-    if (!in_array($fileExtension, EXCEPTED_EXTENSIONS)) {
-        $extensionsString = implode(', ', EXCEPTED_EXTENSIONS);
-        throw new Exception("Extension Error: File {$path} must be {$extensionsString}\n");
-    }
+    $extensionsString = implode(', ', EXCEPTED_EXTENSIONS);
 
     $parsed = match (true) {
         $fileExtension === 'json' => parseJson($path),
         $fileExtension === 'yaml' || $fileExtension === 'yml' => parseYaml($path),
+        default => throw new Exception("Extension Error: File {$path} must be {$extensionsString}\n"),
     };
 
     return $parsed;

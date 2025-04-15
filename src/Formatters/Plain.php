@@ -30,7 +30,7 @@ function formatDiff(array $tree, string $currentPath = ''): array
         };
     }, $tree);
 
-    return array_filter(flatten($result));
+    return array_filter(flatten($result), fn ($value) => $value !== null);
 }
 
 function formatPlain(array $diff): string
