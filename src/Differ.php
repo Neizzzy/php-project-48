@@ -8,7 +8,7 @@ use function Functional\sort;
 use function Differ\Formatters\formater;
 use function Differ\Parsers\parseFile;
 
-function genDiff($path1, $path2, $format): string
+function genDiff($path1, $path2, $format = 'stylish'): string
 {
     try {
         $tree1 = parseFile($path1);
