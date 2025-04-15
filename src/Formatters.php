@@ -4,10 +4,11 @@ namespace Php\Project\Formatters;
 
 use Exception;
 
+use function Php\Project\Formatters\Json\formatJson;
 use function Php\Project\Formatters\Plain\formatPlain;
 use function Php\Project\Formatters\Stylish\formatStylish;
 
-const EXCEPTED_FORMATS = ['stylish', 'plain'];
+const EXCEPTED_FORMATS = ['stylish', 'plain', 'json'];
 
 function formater(array $diffTree, string $format): string
 {
@@ -19,5 +20,6 @@ function formater(array $diffTree, string $format): string
     return match ($format) {
         'stylish' => formatStylish($diffTree),
         'plain' => formatPlain($diffTree),
+        'json' => formatJson($diffTree),
     };
 }
