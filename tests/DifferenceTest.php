@@ -98,6 +98,13 @@ class DifferenceTest extends TestCase
         $this->assertEquals($data, genDiff($this->file1, $this->file2, 'plain'));
     }
 
+    public function testGenDiffJson(): void
+    {
+        $excepted = file_get_contents($this->getFixtureFullPath('excepted_json_format.json'));
+
+        $this->assertEquals($excepted, genDiff($this->file1, $this->file2, 'json'));
+    }
+
     public function testWrongFormat(): void
     {
         $data = [
