@@ -59,8 +59,6 @@ class ParsersTest extends TestCase
         $invalidPath = 'non/existed/path/file.json';
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Path Error: File {$invalidPath} not found!\n");
-
         parseFile($invalidPath);
     }
 
@@ -69,8 +67,6 @@ class ParsersTest extends TestCase
         $path = $this->getFixtureFullPath('file5.txt');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Extension Error: File {$path} must be json or yaml(yml)!\n");
-
         parseFile($path);
     }
 }

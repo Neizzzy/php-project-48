@@ -10,6 +10,8 @@ use function Php\Project\Utils\getKey;
 use function Php\Project\Utils\getType;
 use function Php\Project\Utils\getValue;
 use function Php\Project\Utils\makeIndent;
+use function Php\Project\Utils\normalizePlainValue;
+use function Php\Project\Utils\stringify;
 
 class UtilsTest extends TestCase
 {
@@ -18,7 +20,7 @@ class UtilsTest extends TestCase
         $this->assertEquals("text", convertToString("text"));
         $this->assertEquals("21", convertToString(21));
         $this->assertEquals("true", convertToString(true));
-        $this->assertEquals("NULL", convertToString(null));
+        $this->assertEquals("null", convertToString(null));
     }
 
     public function testGetFunctions(): void
@@ -45,5 +47,33 @@ class UtilsTest extends TestCase
         $this->assertEquals(str_repeat(' ', 2), makeIndent(shift: 2));
         $this->assertEquals(' ', makeIndent(spacesCount: 1));
         $this->assertEquals(str_repeat(' ', 2), makeIndent(2, 2, 2));
+    }
+
+    public function testStringify(): void
+    {
+        $data = [
+            'key' => 'value',
+            'key1' => [
+                'key11' => 'value1',
+                'key12' => 'value2'
+            ]
+        ];
+        $exceptedData = <<<DOC
+        {
+            key: value
+            key1: {
+                key11: value1
+                key12: value2
+            }
+        }
+        DOC;
+
+        $this->assertEquals($exceptedData, stringify($data));
+    }
+
+    public function testNormalizePlainValue(): void
+    {
+        $this->assertEquals("'value'", normalizePlainValue("value"));
+        $this->assertEquals('[complex value]', normalizePlainValue(['item' => 'value']));
     }
 }

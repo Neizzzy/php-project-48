@@ -3,30 +3,38 @@
 namespace Php\Project\Tests\DifferenceTest;
 
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 use function Php\Project\Difference\genDiff;
+use function Php\Project\Formatters\formater;
 
 class DifferenceTest extends TestCase
 {
+    public $file1;
+    public $file2;
+
     public function getFixtureFullPath($fixtureName): bool|string
     {
         $parts = [__DIR__, 'fixtures', $fixtureName];
         return realpath(implode('/', $parts));
     }
 
-    public function testGenDiff(): void
+    public function setUp(): void
     {
-        $file1 = $this->getFixtureFullPath('file1.json');
-        $file2 = $this->getFixtureFullPath('file4.yml');
+        $this->file1 = $this->getFixtureFullPath('file1.json');
+        $this->file2 = $this->getFixtureFullPath('file4.yml');
+    }
 
-        $data3 = <<<DOC
+    public function testGenDiffStylish(): void
+    {
+        $data = <<<DOC
         {
             common: {
               + follow: false
                 setting1: Value 1
               - setting2: 200
               - setting3: true
-              + setting3: NULL
+              + setting3: null
               + setting4: blah blah
               + setting5: {
                     key5: value5
@@ -64,8 +72,43 @@ class DifferenceTest extends TestCase
                 fee: 100500
             }
         }
+        
         DOC;
 
-        $this->assertEquals($data3, genDiff($file1, $file2));
+        $this->assertEquals($data, genDiff($this->file1, $this->file2, 'stylish'));
+    }
+
+    public function testGenDiffPlain(): void
+    {
+        $data = <<<DOC
+        Property 'common.follow' was added with value: false
+        Property 'common.setting2' was removed
+        Property 'common.setting3' was updated. From true to null
+        Property 'common.setting4' was added with value: 'blah blah'
+        Property 'common.setting5' was added with value: [complex value]
+        Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+        Property 'common.setting6.ops' was added with value: 'vops'
+        Property 'group1.baz' was updated. From 'bas' to 'bars'
+        Property 'group1.nest' was updated. From [complex value] to 'str'
+        Property 'group2' was removed
+        Property 'group3' was added with value: [complex value]
+
+        DOC;
+
+        $this->assertEquals($data, genDiff($this->file1, $this->file2, 'plain'));
+    }
+
+    public function testWrongFormat(): void
+    {
+        $data = [
+          [
+            'key' => 'setting',
+            'type' => 'added',
+            'value' => 'test'
+          ],
+        ];
+
+        $this->expectException(Exception::class);
+        formater($data, 'wrongFormat');
     }
 }
