@@ -5,6 +5,8 @@ namespace Php\Project\Parsers;
 use Exception;
 use Symfony\Component\Yaml\Yaml;
 
+const EXCEPTED_EXTENSIONS = ['json', 'yml', 'yaml'];
+
 function parseJson(string $path): array
 {
     return json_decode(file_get_contents($path), true, flags: JSON_OBJECT_AS_ARRAY);
@@ -23,9 +25,9 @@ function parseFile(string $path): array
 
     $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
 
-    $needleExtensions = ['json', 'yml', 'yaml'];
-    if (!in_array($fileExtension, $needleExtensions)) {
-        throw new Exception("Extension Error: File {$path} must be json or yaml(yml)!\n");
+    if (!in_array($fileExtension, EXCEPTED_EXTENSIONS)) {
+        $extensionsString = implode(', ', EXCEPTED_EXTENSIONS);
+        throw new Exception("Extension Error: File {$path} must be {$extensionsString}\n");
     }
 
     $parsed = match (true) {
