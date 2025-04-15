@@ -1,12 +1,12 @@
 <?php
 
-namespace Php\Project\Formatters;
+namespace Differ\Formatters;
 
 use Exception;
 
-use function Php\Project\Formatters\Json\formatJson;
-use function Php\Project\Formatters\Plain\formatPlain;
-use function Php\Project\Formatters\Stylish\formatStylish;
+use function Differ\Formatters\Json\formatJson;
+use function Differ\Formatters\Plain\formatPlain;
+use function Differ\Formatters\Stylish\formatStylish;
 
 const EXCEPTED_FORMATS = ['stylish', 'plain', 'json'];
 

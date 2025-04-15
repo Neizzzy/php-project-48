@@ -1,6 +1,6 @@
 <?php
 
-namespace Php\Project\Utils;
+namespace Differ\Utils;
 
 function convertToString(mixed $value): string
 {

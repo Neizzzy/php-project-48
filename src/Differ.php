@@ -1,12 +1,12 @@
 <?php
 
-namespace Php\Project\Difference;
+namespace Differ\Differ;
 
 use Exception;
 
 use function Functional\sort;
-use function Php\Project\Formatters\formater;
-use function Php\Project\Parsers\parseFile;
+use function Differ\Formatters\formater;
+use function Differ\Parsers\parseFile;
 
 function genDiff($path1, $path2, $format): string
 {

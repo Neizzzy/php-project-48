@@ -1,11 +1,11 @@
 <?php
 
-namespace Php\Project\Tests\ParsersTest;
+namespace Differ\Tests\ParsersTest;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
 
-use function Php\Project\Parsers\parseFile;
+use function Differ\Parsers\parseFile;
 
 class ParsersTest extends TestCase
 {

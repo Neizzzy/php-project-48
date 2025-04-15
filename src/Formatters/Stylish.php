@@ -1,13 +1,13 @@
 <?php
 
-namespace Php\Project\Formatters\Stylish;
+namespace Differ\Formatters\Stylish;
 
-use function Php\Project\Utils\getKey;
-use function Php\Project\Utils\getType;
-use function Php\Project\Utils\getChild;
-use function Php\Project\Utils\getValue;
-use function Php\Project\Utils\stringify;
-use function Php\Project\Utils\makeIndent;
+use function Differ\Utils\getKey;
+use function Differ\Utils\getType;
+use function Differ\Utils\getChild;
+use function Differ\Utils\getValue;
+use function Differ\Utils\stringify;
+use function Differ\Utils\makeIndent;
 
 function formatDiff(array $tree, int $currentDepth = 1): string
 {

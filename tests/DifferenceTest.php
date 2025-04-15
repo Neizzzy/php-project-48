@@ -1,12 +1,12 @@
 <?php
 
-namespace Php\Project\Tests\DifferenceTest;
+namespace Differ\Tests\DifferenceTest;
 
 use PHPUnit\Framework\TestCase;
 use Exception;
 
-use function Php\Project\Difference\genDiff;
-use function Php\Project\Formatters\formater;
+use function Differ\Differ\genDiff;
+use function Differ\Formatters\formater;
 
 class DifferenceTest extends TestCase
 {

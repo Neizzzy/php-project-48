@@ -1,13 +1,13 @@
 <?php
 
-namespace Php\Project\Formatters\Plain;
+namespace Differ\Formatters\Plain;
 
 use function Functional\flatten;
-use function Php\Project\Utils\getKey;
-use function Php\Project\Utils\getType;
-use function Php\Project\Utils\getChild;
-use function Php\Project\Utils\getValue;
-use function Php\Project\Utils\normalizePlainValue;
+use function Differ\Utils\getKey;
+use function Differ\Utils\getType;
+use function Differ\Utils\getChild;
+use function Differ\Utils\getValue;
+use function Differ\Utils\normalizePlainValue;
 
 function formatDiff(array $tree, string $currentPath = ''): array
 {

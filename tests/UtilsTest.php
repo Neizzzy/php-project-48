@@ -1,17 +1,17 @@
 <?php
 
-namespace Php\Project\Tests\UtilsTest;
+namespace Differ\Tests\UtilsTest;
 
 use PHPUnit\Framework\TestCase;
 
-use function Php\Project\Utils\convertToString;
-use function Php\Project\Utils\getChild;
-use function Php\Project\Utils\getKey;
-use function Php\Project\Utils\getType;
-use function Php\Project\Utils\getValue;
-use function Php\Project\Utils\makeIndent;
-use function Php\Project\Utils\normalizePlainValue;
-use function Php\Project\Utils\stringify;
+use function Differ\Utils\convertToString;
+use function Differ\Utils\getChild;
+use function Differ\Utils\getKey;
+use function Differ\Utils\getType;
+use function Differ\Utils\getValue;
+use function Differ\Utils\makeIndent;
+use function Differ\Utils\normalizePlainValue;
+use function Differ\Utils\stringify;
 
 class UtilsTest extends TestCase
 {
