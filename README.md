@@ -15,3 +15,6 @@ gendiff with nesting (stylish format):
 
 gendiff with nesting (plain format):
 [![asciicast](https://asciinema.org/a/oEAdYQNhucK7gexElbs8epIbH.svg)](https://asciinema.org/a/oEAdYQNhucK7gexElbs8epIbH)
+
+gendiff with nesting (json format):
+[![asciicast](https://asciinema.org/a/zU5UGDpL8fgWB07pJqR0GvFEN.svg)](https://asciinema.org/a/zU5UGDpL8fgWB07pJqR0GvFEN)
