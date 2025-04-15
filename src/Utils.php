@@ -4,7 +4,7 @@ namespace Php\Project\Utils;
 
 function convertToString(mixed $value): string
 {
-    return trim(var_export($value, true), "'");
+    return is_null($value) ? 'null' : trim(var_export($value, true), "'");
 }
 
 function getType(array $value): string
@@ -32,38 +32,7 @@ function makeIndent(int $depth = 1, int $shift = 0, int $spacesCount = 4): strin
     return str_repeat(' ', $spacesCount * $depth - $shift);
 }
 
-function formatDiff(array $tree, int $currentDepth = 1)
-{
-    $result = array_map(function ($node) use ($currentDepth) {
-        $type = getType($node);
-        $key = getKey($node);
-        $indent = makeIndent($currentDepth);
-        $reducedIndent = makeIndent($currentDepth, 2);
-
-        return match ($type) {
-            'nested' =>
-                "{$indent}{$key}: {\n" . formatDiff(getChild($node), $currentDepth + 1) . "\n{$indent}}",
-
-            'unchanged' =>
-                "{$indent}{$key}: " . stringify(getValue($node), $currentDepth),
-
-            'updated' =>
-                "{$reducedIndent}- {$key}: " . stringify(getValue($node)['firstValue'], $currentDepth) . "\n" .
-                "{$reducedIndent}+ {$key}: " . stringify(getValue($node)['secondValue'], $currentDepth),
-
-            'removed' =>
-                "{$reducedIndent}- {$key}: " . stringify(getValue($node), $currentDepth),
-
-            'added' =>
-                "{$reducedIndent}+ {$key}: " . stringify(getValue($node), $currentDepth),
-        };
-    }, $tree);
-
-    return implode("\n", $result);
-}
-
-
-function stringify(mixed $value, int $currentDepth): string
+function stringify(mixed $value, int $currentDepth = 0): string
 {
     if (!is_array($value)) {
         return convertToString($value);
@@ -80,8 +49,15 @@ function stringify(mixed $value, int $currentDepth): string
     return "{\n" . implode("\n", $result) . "\n{$indentEndBrace}}";
 }
 
-function formatStylish(array $diff): string
+function normalizePlainValue(mixed $value): string
 {
-    $result = formatDiff($diff);
-    return "{\n{$result}\n}";
+    if (is_array($value)) {
+        return '[complex value]';
+    }
+
+    if (is_string($value)) {
+        return "'{$value}'";
+    }
+
+    return convertToString($value);
 }
