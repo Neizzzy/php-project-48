@@ -5,20 +5,20 @@ namespace Php\Project\Difference;
 use Exception;
 
 use function Functional\sort;
+use function Php\Project\Formatters\formater;
 use function Php\Project\Parsers\parseFile;
-use function Php\Project\Utils\formatStylish;
 
-function genDiff($path1, $path2)
+function genDiff($path1, $path2, $format): string
 {
     try {
         $tree1 = parseFile($path1);
         $tree2 = parseFile($path2);
+
+        $diffTree = findDiff($tree1, $tree2);
+        return formater($diffTree, $format);
     } catch (Exception $err) {
         die($err->getMessage());
     }
-
-    $diffTree = findDiff($tree1, $tree2);
-    return formatStylish($diffTree);
 }
 
 function findDiff(array $node1, array $node2): array
