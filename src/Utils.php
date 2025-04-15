@@ -42,11 +42,13 @@ function stringify(mixed $value, int $currentDepth = 0): string
     $result = array_map(function ($key) use ($value, $currentDepth) {
         $newDepth = $currentDepth + 1;
         $indent = makeIndent($newDepth);
-        return "{$indent}{$key}: " . stringify($value[$key], $newDepth);
+        $stringified = stringify($value[$key], $newDepth);
+        return "{$indent}{$key}: {$stringified}";
     }, $keys);
 
     $indentEndBrace = makeIndent($currentDepth);
-    return "{\n" . implode("\n", $result) . "\n{$indentEndBrace}}";
+    $imploded = implode("\n", $result);
+    return "{\n{$imploded}\n{$indentEndBrace}}";
 }
 
 function normalizePlainValue(mixed $value): string

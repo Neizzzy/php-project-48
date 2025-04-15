@@ -12,21 +12,20 @@ use function Php\Project\Utils\normalizePlainValue;
 function formatDiff(array $tree, string $currentPath = ''): array
 {
     $result = array_map(function ($tree) use ($currentPath) {
+        $key = getKey($tree);
+        $path = "{$currentPath}{$key}";
         switch (getType($tree)) {
             case 'nested':
-                $newPath = $currentPath . getKey($tree) . '.';
+                $newPath = "{$path}.";
                 return formatDiff(getChild($tree), $newPath);
             case 'added':
                 $value = normalizePlainValue(getValue($tree));
-                $path = $currentPath . getKey($tree);
                 return "Property '{$path}' was added with value: {$value}";
             case 'removed':
-                $path = $currentPath . getKey($tree);
                 return "Property '{$path}' was removed";
             case 'updated':
                 $value1 = normalizePlainValue(getValue($tree)['firstValue']);
                 $value2 = normalizePlainValue(getValue($tree)['secondValue']);
-                $path = $currentPath . getKey($tree);
                 return "Property '{$path}' was updated. From {$value1} to {$value2}";
         };
     }, $tree);
@@ -37,5 +36,6 @@ function formatDiff(array $tree, string $currentPath = ''): array
 function formatPlain(array $diff): string
 {
     $result = formatDiff($diff);
-    return implode("\n", $result) . "\n";
+    $formatedResult = implode("\n", $result);
+    return "{$formatedResult}\n";
 }

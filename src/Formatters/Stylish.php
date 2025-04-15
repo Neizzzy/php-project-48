@@ -17,23 +17,24 @@ function formatDiff(array $tree, int $currentDepth = 1): string
         $indent = makeIndent($currentDepth);
         $reducedIndent = makeIndent($currentDepth, 2);
 
-        return match ($type) {
-            'nested' =>
-                "{$indent}{$key}: {\n" . formatDiff(getChild($node), $currentDepth + 1) . "\n{$indent}}",
-
-            'unchanged' =>
-                "{$indent}{$key}: " . stringify(getValue($node), $currentDepth),
-
-            'updated' =>
-                "{$reducedIndent}- {$key}: " . stringify(getValue($node)['firstValue'], $currentDepth) . "\n" .
-                "{$reducedIndent}+ {$key}: " . stringify(getValue($node)['secondValue'], $currentDepth),
-
-            'removed' =>
-                "{$reducedIndent}- {$key}: " . stringify(getValue($node), $currentDepth),
-
-            'added' =>
-                "{$reducedIndent}+ {$key}: " . stringify(getValue($node), $currentDepth),
-        };
+        switch ($type) {
+            case 'nested':
+                $value = formatDiff(getChild($node), $currentDepth + 1);
+                return "{$indent}{$key}: {\n{$value}\n{$indent}}";
+            case 'unchanged':
+                $value = stringify(getValue($node), $currentDepth);
+                return "{$indent}{$key}: {$value}";
+            case 'updated':
+                $value1 = stringify(getValue($node)['firstValue'], $currentDepth);
+                $value2 = stringify(getValue($node)['secondValue'], $currentDepth);
+                return "{$reducedIndent}- {$key}: $value1\n{$reducedIndent}+ {$key}: {$value2}";
+            case 'removed':
+                $value = stringify(getValue($node), $currentDepth);
+                return "{$reducedIndent}- {$key}: {$value}";
+            case 'added':
+                $value = stringify(getValue($node), $currentDepth);
+                return "{$reducedIndent}+ {$key}: {$value}";
+        }
     }, $tree);
 
     return implode("\n", $result);
